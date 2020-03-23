@@ -3,7 +3,7 @@
         <transition name="fadeTop">
             <div class="ion-text-center ion-margin-vertical" id="loaderTop"
                  v-show="this.loading">
-                <ion-spinner color="dark"></ion-spinner>
+                <ion-spinner color="warning"></ion-spinner>
             </div>
         </transition>
 
@@ -34,11 +34,11 @@
                 <ion-img class="booksIcon"
                          :class="this.nothing && this.isSearching ? 'grayFilter' : ''"
                          :src="require('@/assets/booksIcon.png')"
-                         v-if="this.nothing || !this.isSearching">
+                         v-show="this.nothing || !this.isSearching">
                 </ion-img>
             </transition>
             <transition name="fade">
-                <ion-text color="medium" class="errorText" v-if="this.nothing && this.isSearching">
+                <ion-text color="medium" class="errorText" v-show="this.nothing && this.isSearching">
                     <ion-icon name="search" style="margin-right: 4px;"></ion-icon>
                     <h6 class="ion-no-margin">No Result</h6>
                 </ion-text>
