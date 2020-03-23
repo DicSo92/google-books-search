@@ -35,6 +35,7 @@ export default new Vuex.Store({
         changeFilter(state, newFilter) {
             state.filter = newFilter
         },
+
         changeBooks(state, newBooks) {
             state.books = newBooks
         },
@@ -47,6 +48,7 @@ export default new Vuex.Store({
         changeTotalItems(state, newTotalItems) {
             state.totalItems = newTotalItems
         },
+
         changeTitleSearch(state, newTitleSearch) {
             state.titleSearch = newTitleSearch
         },

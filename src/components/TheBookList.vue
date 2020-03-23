@@ -9,8 +9,8 @@
 
 
         <transition name="fade">
-            <ion-text  class="ion-text-start" color="medium" v-if="this.totalItems">
-                <p class="nbResults">{{this.totalItems}} Results</p>
+            <ion-text  class="ion-text-start" color="medium" v-if="this.$store.state.totalItems">
+                <p class="nbResults">{{this.$store.state.totalItems}} Results</p>
             </ion-text>
         </transition>
         <ion-list class="booksContainer" scroll-y="true">
@@ -62,11 +62,9 @@
         data() {
             return {
                 loading: false,
+                infiniteLoading: false,
+
                 books: [],
-                startIndex: 0,
-                maxResults: 10,
-                totalItems: null,
-                infiniteLoading: false
             }
         },
         created() {
@@ -83,11 +81,11 @@
             this.$refs.infiniteScroll.addEventListener("ionInfinite", event => {
                 setTimeout(() => {
                     this.infiniteLoading = true
-                    this.startIndex += this.maxResults
+                    this.$store.state.startIndex += this.$store.state.maxResults
                     this.getBooks()
                     // event.target.complete()  // In getBooksFunction
 
-                    if (this.startIndex + this.maxResults >= this.totalItems) {
+                    if (this.$store.state.startIndex + this.$store.state.maxResults >= this.$store.state.totalItems) {
                         event.target.disabled = true
                     }
                 }, 500)
@@ -124,7 +122,7 @@
                 return this.$store.state.filter === 'all' ? '' : '&filter=' + this.$store.state.filter
             },
             nothing() {
-                return this.totalItems <= 0;
+                return this.$store.state.totalItems <= 0;
             },
             isSearching() {
                 return this.getTitleSearch.length > 0 || this.getAuthorSearch.length > 0 || this.getGlobalSearch.length > 0
@@ -134,7 +132,7 @@
             getBooks() {
                 if (!this.infiniteLoading && this.$refs.theBookList) {
                     this.$refs.theBookList.scrollToTop(200)
-                    this.startIndex = 0
+                    this.$store.commit('changeStartIndex', 0)
                 }
 
                 if (this.getTitleSearch.length > 0 || this.getAuthorSearch.length > 0 || this.getGlobalSearch.length > 0) {
@@ -155,15 +153,15 @@
                             }${
                                 this.getFilter
                             }&startIndex=${
-                                this.startIndex
+                                this.$store.state.startIndex
                             }&maxResults=${
-                                this.maxResults
+                                this.$store.state.maxResults
                             }`
                         )
                         .then(response => {
                             if (response.data.items) {
                                 if (!this.infiniteLoading) {
-                                    this.totalItems = response.data.totalItems
+                                    this.$store.commit('changeTotalItems', response.data.totalItems)
                                     this.books = response.data.items
                                 } else {
                                     response.data.items.forEach( book => {
@@ -173,9 +171,10 @@
                                     this.infiniteLoading = false
                                 }
                             } else {
-                                this.totalItems = response.data.totalItems ? response.data.totalItems : null
+                                this.$store.commit('changeTotalItems', response.data.totalItems ? response.data.totalItems : null)
                                 this.books = []
                             }
+                            this.$store.commit('changeBooks', this.books)
                             this.loading = false
                         })
                         .catch(error => {
@@ -183,6 +182,7 @@
                         });
                 } else {
                     this.books = []
+                    this.$store.commit('changeBooks', this.books)
                     this.loading = false
                 }
             }

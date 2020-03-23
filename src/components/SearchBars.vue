@@ -73,6 +73,7 @@
         },
         watch: {
             titleSearch(val) {
+                console.log('changeTitleSearch')
                 this.$store.commit('changeTitleSearch', val)
             },
             authorSearch(val) {

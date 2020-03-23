@@ -33,6 +33,7 @@
             }
         },
         mounted() {
+            console.log('mounted')
         },
         watch: {
         },
