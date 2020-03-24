@@ -1,5 +1,5 @@
 <template>
-    <ion-content fullscreen ref="theBookList">
+    <ion-content fullscreen ref="theBookList" @ionScrollEnd="changeOffsetTop">
         <transition name="fadeTop">
             <div class="ion-text-center ion-margin-vertical" id="loaderTop"
                  v-show="this.loading">
@@ -83,6 +83,7 @@
 
             if (this.$store.state.routerHistory) {
                 this.books = this.$store.state.books
+                this.$refs.theBookList.scrollToPoint(null, this.$store.state.offsetTop)
                 this.$nextTick(function () {
                     this.$store.commit('changeRouterHistory', false)
                 })
@@ -145,6 +146,11 @@
             }
         },
         methods: {
+            changeOffsetTop(e) {
+                e.target.getScrollElement().then(promise => {
+                    this.$store.commit('changeOffsetTop', promise.scrollTop)
+                })
+            },
             getBooks() {
                 console.log('getBooks')
                 if (!this.infiniteLoading && this.$refs.theBookList) {

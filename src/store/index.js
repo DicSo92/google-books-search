@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         routerHistory: false,
-        scrollPos: 0,
+        offsetTop: 0,
 
         type: 'all',
         lang: 'fr',
@@ -29,6 +29,10 @@ export default new Vuex.Store({
         changeRouterHistory(state, val) {
             state.routerHistory = val
         },
+        changeOffsetTop(state, val) {
+            state.offsetTop = val
+        },
+
         changeType(state, newType) {
             state.type = newType
         },
