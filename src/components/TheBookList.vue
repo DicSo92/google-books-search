@@ -7,12 +7,12 @@
             </div>
         </transition>
 
-
         <transition name="fade">
-            <ion-text  class="ion-text-start" color="medium" v-if="this.$store.state.totalItems">
+            <ion-text  class="ion-text-start" color="medium" v-if="!this.nothing && this.isSearching">
                 <p class="nbResults">{{this.$store.state.totalItems}} Results</p>
             </ion-text>
         </transition>
+
         <ion-list class="booksContainer" scroll-y="true">
             <transition-group name="list" tag="div">
                 <BookItem v-for="(book, index) in this.books"
