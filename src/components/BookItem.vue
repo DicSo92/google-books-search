@@ -27,13 +27,7 @@
         },
         computed: {
             getAuthors () {
-                if (this.book.volumeInfo.authors) {
-                    let authors = this.book.volumeInfo.authors[0]
-                    this.book.volumeInfo.authors[1] ? authors.concat(', ' + this.book.volumeInfo.authors[1]) : false
-                    return authors
-                } else {
-                    return 'Unknown Author'
-                }
+                return this.book.volumeInfo.authors ? this.book.volumeInfo.authors.join(', ') : 'Unknown Author'
             },
         },
         methods: {
