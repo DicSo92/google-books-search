@@ -38,7 +38,8 @@
         },
         methods: {
             goToBook() {
-                this.$router.push({ name: 'book', params: { bookId: this.book.id }});
+                this.$router.push({ name: 'book', params: { bookId: this.book.id }})
+                this.$store.commit('changeRouterHistory', true)
             },
             showQuickView() {
                 return this.$ionic.modalController

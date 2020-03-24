@@ -5,6 +5,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        routerHistory: false,
+        scrollPos: 0,
+
         type: 'all',
         lang: 'fr',
         orderBy: 'newest',
@@ -23,6 +26,9 @@ export default new Vuex.Store({
         showGlobalSearch: false,
     },
     mutations: {
+        changeRouterHistory(state, val) {
+            state.routerHistory = val
+        },
         changeType(state, newType) {
             state.type = newType
         },

@@ -69,14 +69,24 @@
         },
         created() {
             this.debouncedGetSearch = _.debounce(this.getBooks, 500)
+
         },
         mounted() {
             this.$bus.$on('changeFilter', () => {
-                this.loading = true
-                this.$nextTick(function () {
-                    this.getBooks()
-                })
+                if (!this.$store.state.routerHistory) {
+                    this.loading = true
+                    this.$nextTick(function () {
+                        this.getBooks()
+                    })
+                }
             })
+
+            if (this.$store.state.routerHistory) {
+                this.books = this.$store.state.books
+                this.$nextTick(function () {
+                    this.$store.commit('changeRouterHistory', false)
+                })
+            }
 
             this.$refs.infiniteScroll.addEventListener("ionInfinite", event => {
                 setTimeout(() => {
@@ -93,19 +103,25 @@
         },
         watch: {
             getTitleSearch: function (newSearch, oldSearch) {
-                console.log("J'attends que vous arrêtiez de taper...")
-                this.loading = true
-                this.debouncedGetSearch()
+                if (!this.$store.state.routerHistory) {
+                    console.log("J'attends que vous arrêtiez de taper...")
+                    this.loading = true
+                    this.debouncedGetSearch()
+                }
             },
             getAuthorSearch: function (newSearch, oldSearch) {
-                console.log("J'attends que vous arrêtiez de taper...")
-                this.loading = true
-                this.debouncedGetSearch()
+                if (!this.$store.state.routerHistory) {
+                    console.log("J'attends que vous arrêtiez de taper...")
+                    this.loading = true
+                    this.debouncedGetSearch()
+                }
             },
             getGlobalSearch: function (newSearch, oldSearch) {
-                console.log("J'attends que vous arrêtiez de taper...")
-                this.loading = true
-                this.debouncedGetSearch()
+                if (!this.$store.state.routerHistory) {
+                    console.log("J'attends que vous arrêtiez de taper...")
+                    this.loading = true
+                    this.debouncedGetSearch()
+                }
             },
         },
         computed: {
@@ -130,6 +146,7 @@
         },
         methods: {
             getBooks() {
+                console.log('getBooks')
                 if (!this.infiniteLoading && this.$refs.theBookList) {
                     this.$refs.theBookList.scrollToTop(200)
                     this.$store.commit('changeStartIndex', 0)
