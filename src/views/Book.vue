@@ -38,13 +38,57 @@
                     </p>
                 </ion-text>
             </div>
+
             <div class="">
                 <ion-text class="ion-text-start">
                     <p class="mb-8 mt-8"><b>Description :</b></p>
                     <p class="mt-0"><span v-html="getDescription"></span></p>
                 </ion-text>
             </div>
-            <ion-button expand="block" @click="goToViewer" :disabled="book.accessInfo.viewability === 'NO_PAGES'">Book Viewer</ion-button>
+
+            <ion-button expand="block" class="ion-margin-vertical"
+                        @click="goToViewer"
+                        :disabled="book.accessInfo.viewability === 'NO_PAGES'">
+                Book Viewer
+            </ion-button>
+
+            <div class="">
+                <ion-text class="ion-text-start">
+                    <p class="mb-8 mt-8"><b>Details :</b></p>
+                </ion-text>
+                <ion-list>
+                    <ion-item>
+                        <ion-label>Editors :</ion-label>
+                        <ion-text>
+                            <p class="ion-no-margin">Ecouter pour comprendre</p>
+                        </ion-text>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Publish Date :</ion-label>
+                        <ion-text>
+                            <p class="ion-no-margin">19 juin 2019</p>
+                        </ion-text>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Pages :</ion-label>
+                        <ion-text>
+                            <p class="ion-no-margin">45</p>
+                        </ion-text>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>ISBN :</ion-label>
+                        <ion-text>
+                            <p class="ion-no-margin">9789782490490</p>
+                        </ion-text>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Language :</ion-label>
+                        <ion-text>
+                            <p class="ion-no-margin">Fr</p>
+                        </ion-text>
+                    </ion-item>
+                </ion-list>
+            </div>
 
             <div class="qrCodeContainer">
                 <ion-thumbnail class="thumbnailQrCode">
