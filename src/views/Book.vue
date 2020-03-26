@@ -58,33 +58,33 @@
                 </ion-text>
                 <ion-list>
                     <ion-item>
-                        <ion-label>Editors :</ion-label>
+                        <ion-label>Publisher :</ion-label>
                         <ion-text>
-                            <p class="ion-no-margin">Ecouter pour comprendre</p>
+                            <p class="ion-no-margin">{{book.volumeInfo.publisher}}</p>
                         </ion-text>
                     </ion-item>
                     <ion-item>
                         <ion-label>Publish Date :</ion-label>
                         <ion-text>
-                            <p class="ion-no-margin">19 juin 2019</p>
+                            <p class="ion-no-margin">{{book.volumeInfo.publishedDate}}</p>
                         </ion-text>
                     </ion-item>
                     <ion-item>
                         <ion-label>Pages :</ion-label>
                         <ion-text>
-                            <p class="ion-no-margin">45</p>
+                            <p class="ion-no-margin">{{book.volumeInfo.pageCount ? book.volumeInfo.pageCount : 'Unknown '}}</p>
                         </ion-text>
                     </ion-item>
                     <ion-item>
                         <ion-label>ISBN :</ion-label>
                         <ion-text>
-                            <p class="ion-no-margin">9789782490490</p>
+                            <p class="ion-no-margin">{{getIsbn}}</p>
                         </ion-text>
                     </ion-item>
                     <ion-item>
                         <ion-label>Language :</ion-label>
                         <ion-text>
-                            <p class="ion-no-margin">Fr</p>
+                            <p class="ion-no-margin">{{book.volumeInfo.language}}</p>
                         </ion-text>
                     </ion-item>
                 </ion-list>
@@ -123,6 +123,9 @@
             },
             getDescription() {
                 return this.book.volumeInfo.description ? this.book.volumeInfo.description : 'Doesn\'t have Description...'
+            },
+            getIsbn() {
+                return this.book.volumeInfo.industryIdentifiers[0].identifier
             },
             imageLink() {
                 if (this.book.volumeInfo.imageLinks) {
