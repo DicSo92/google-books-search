@@ -7,7 +7,7 @@
                         <ion-back-button></ion-back-button>
                     </ion-buttons>
                 </ion-nav-link>
-                <ion-title>{{this.$route.params.bookId}}</ion-title>
+                <ion-title>BookViewer</ion-title>
                 <ion-buttons slot="end">
                     <ion-button @click="displayViewer">Refresh</ion-button>
                 </ion-buttons>
