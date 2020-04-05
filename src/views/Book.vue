@@ -10,102 +10,109 @@
                 <ion-title v-if="book">{{book.volumeInfo.title}}</ion-title>
             </ion-toolbar>
         </ion-header>
-        <ion-content class="ion-padding" v-if="book">
+        <ion-content class="ion-padding">
             <div class="modalHeader">
                 <ion-thumbnail class="thumbnailImg">
                     <ion-img :src="imageLink != null ? imageLink : require('@/assets/NotAvailable.jpg')"></ion-img>
                 </ion-thumbnail>
             </div>
-            <div class="border-b">
-                <ion-text class="ion-text-start" color="medium">
-                    <h6 class="mb-0 ion-text-uppercase">{{getAuthors}}</h6>
-                </ion-text>
-                <ion-text class="ion-text-start">
-                    <h3 class="ion-no-margin"><b>{{book.volumeInfo.title}}</b></h3>
-                </ion-text>
-                <ion-text class="ion-text-start" color="medium">
-                    <p class="mt-0 mb-8">{{book.volumeInfo.publisher ? book.volumeInfo.publisher : 'Independently Published'}} - {{book.volumeInfo.publishedDate}}</p>
-                </ion-text>
-            </div>
-            <div class="" v-if="book.volumeInfo.categories">
-                <ion-text class="ion-text-start">
-                    <p class="mb-0 mt-8"><b>Categories :</b></p>
-                    <p class="ion-no-margin">
-                        <ion-chip color="tertiary" class="chip" outline
-                                  v-for="(category, index) in book.volumeInfo.categories">
-                            <ion-label>{{category}}</ion-label>
-                        </ion-chip>
-                    </p>
-                </ion-text>
+            <div class="" v-if="book">
+                <div class="border-b">
+                    <ion-text class="ion-text-start" color="medium">
+                        <h6 class="mb-0 ion-text-uppercase">{{getAuthors}}</h6>
+                    </ion-text>
+                    <ion-text class="ion-text-start">
+                        <h3 class="ion-no-margin"><b>{{book.volumeInfo.title}}</b></h3>
+                    </ion-text>
+                    <ion-text class="ion-text-start" color="medium">
+                        <p class="mt-0 mb-8">{{book.volumeInfo.publisher ? book.volumeInfo.publisher : 'Independently Published'}} - {{book.volumeInfo.publishedDate}}</p>
+                    </ion-text>
+                </div>
+                <div class="" v-if="book.volumeInfo.categories">
+                    <ion-text class="ion-text-start">
+                        <p class="mb-0 mt-8"><b>Categories :</b></p>
+                        <p class="ion-no-margin">
+                            <ion-chip color="tertiary" class="chip" outline
+                                      v-for="(category, index) in book.volumeInfo.categories">
+                                <ion-label>{{category}}</ion-label>
+                            </ion-chip>
+                        </p>
+                    </ion-text>
+                </div>
+
+                <div class="">
+                    <ion-text class="ion-text-start">
+                        <p class="mb-8 mt-8"><b>Description :</b></p>
+                        <p class="mt-0"><span v-html="getDescription"></span></p>
+                    </ion-text>
+                </div>
+
+                <ion-button expand="block" class="ion-margin-vertical"
+                            @click="goToViewer"
+                            :disabled="book.accessInfo.viewability === 'NO_PAGES'">
+                    Book Viewer
+                </ion-button>
+
+                <div class="">
+                    <ion-text class="ion-text-start">
+                        <p class="mb-8 mt-8"><b>Details :</b></p>
+                    </ion-text>
+                    <ion-list>
+                        <ion-item>
+                            <ion-label>Publisher :</ion-label>
+                            <ion-text>
+                                <p class="ion-no-margin">{{book.volumeInfo.publisher}}</p>
+                            </ion-text>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>Publish Date :</ion-label>
+                            <ion-text>
+                                <p class="ion-no-margin">{{book.volumeInfo.publishedDate}}</p>
+                            </ion-text>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>Pages :</ion-label>
+                            <ion-text>
+                                <p class="ion-no-margin">{{book.volumeInfo.pageCount ? book.volumeInfo.pageCount : 'Unknown '}}</p>
+                            </ion-text>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>ISBN :</ion-label>
+                            <ion-text>
+                                <p class="ion-no-margin">{{getIsbn}}</p>
+                            </ion-text>
+                        </ion-item>
+                        <ion-item>
+                            <ion-label>Language :</ion-label>
+                            <ion-text>
+                                <p class="ion-no-margin">{{book.volumeInfo.language}}</p>
+                            </ion-text>
+                        </ion-item>
+                    </ion-list>
+                </div>
+
+                <div class="qrCodeContainer">
+                    <ion-thumbnail class="thumbnailQrCode">
+                        <ion-img :src="`https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=https://books.google.fr/books?id=${this.$route.params.bookId}&source=qrcode`"></ion-img>
+                    </ion-thumbnail>
+                </div>
             </div>
 
-            <div class="">
-                <ion-text class="ion-text-start">
-                    <p class="mb-8 mt-8"><b>Description :</b></p>
-                    <p class="mt-0"><span v-html="getDescription"></span></p>
-                </ion-text>
-            </div>
+            <BookSkeleton v-else></BookSkeleton>
 
-            <ion-button expand="block" class="ion-margin-vertical"
-                        @click="goToViewer"
-                        :disabled="book.accessInfo.viewability === 'NO_PAGES'">
-                Book Viewer
-            </ion-button>
-
-            <div class="">
-                <ion-text class="ion-text-start">
-                    <p class="mb-8 mt-8"><b>Details :</b></p>
-                </ion-text>
-                <ion-list>
-                    <ion-item>
-                        <ion-label>Publisher :</ion-label>
-                        <ion-text>
-                            <p class="ion-no-margin">{{book.volumeInfo.publisher}}</p>
-                        </ion-text>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label>Publish Date :</ion-label>
-                        <ion-text>
-                            <p class="ion-no-margin">{{book.volumeInfo.publishedDate}}</p>
-                        </ion-text>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label>Pages :</ion-label>
-                        <ion-text>
-                            <p class="ion-no-margin">{{book.volumeInfo.pageCount ? book.volumeInfo.pageCount : 'Unknown '}}</p>
-                        </ion-text>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label>ISBN :</ion-label>
-                        <ion-text>
-                            <p class="ion-no-margin">{{getIsbn}}</p>
-                        </ion-text>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label>Language :</ion-label>
-                        <ion-text>
-                            <p class="ion-no-margin">{{book.volumeInfo.language}}</p>
-                        </ion-text>
-                    </ion-item>
-                </ion-list>
-            </div>
-
-            <div class="qrCodeContainer">
-                <ion-thumbnail class="thumbnailQrCode">
-                    <ion-img :src="`https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=https://books.google.fr/books?id=${this.$route.params.bookId}&source=qrcode`"></ion-img>
-                </ion-thumbnail>
-            </div>
         </ion-content>
     </div>
 </template>
 
 <script>
     import axios from 'axios'
+    import BookSkeleton from '@/components/BookSkeleton.vue'
+
 
     export default {
         name: 'Book',
         components: {
-
+            BookSkeleton
         },
         data() {
             return {
@@ -128,7 +135,7 @@
                 return this.book.volumeInfo.industryIdentifiers[0].identifier
             },
             imageLink() {
-                if (this.book.volumeInfo.imageLinks) {
+                if (this.book && this.book.volumeInfo.imageLinks) {
                     // if (this.book.volumeInfo.imageLinks.extraLarge) {
                     //     return this.book.volumeInfo.imageLinks.extraLarge
                     // }
