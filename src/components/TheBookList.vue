@@ -22,7 +22,7 @@
             </transition-group>
         </ion-list>
 
-        <ion-infinite-scroll threshold="100px" ref="infiniteScroll" v-show="this.books.length > 0">
+        <ion-infinite-scroll threshold="100px" ref="infiniteScroll" v-show="this.books && this.books.length > 0">
             <ion-infinite-scroll-content
                     loading-spinner="bubbles"
                     loading-text="Loading more data...">
