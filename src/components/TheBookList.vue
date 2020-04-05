@@ -29,7 +29,7 @@
             </ion-infinite-scroll-content>
         </ion-infinite-scroll>
 
-        <div class="booksIconContainer">
+        <div class="booksIconContainer" v-if="this.isOnline">
             <transition name="fade">
                 <ion-img class="booksIcon"
                          :class="this.nothing && this.isSearching ? 'grayFilter' : ''"
@@ -69,7 +69,7 @@
         },
         created() {
             this.debouncedGetSearch = _.debounce(this.getBooks, 500)
-            if (!this.isOffline) {
+            if (this.isOffline) {
                 this.getBooks()
             }
         },
@@ -217,6 +217,7 @@
                     }
                 } else {
                     this.books = this.$offlineStorage.get('books') //Get books if offline
+                    this.$store.commit('changeBooks', this.books)
                     this.loading = false
                 }
             }
