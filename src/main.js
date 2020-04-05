@@ -16,6 +16,8 @@ import lodash from 'lodash'
 import './registerServiceWorker'
 Vue.use(VueLodash, { name: 'custom' , lodash: lodash })
 
+import VueOffline from 'vue-offline'
+Vue.use(VueOffline)
 
 let bus = new Vue
 Vue.prototype.$bus = bus

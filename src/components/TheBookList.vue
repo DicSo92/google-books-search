@@ -69,7 +69,9 @@
         },
         created() {
             this.debouncedGetSearch = _.debounce(this.getBooks, 500)
-
+            if (!this.isOffline) {
+                this.getBooks()
+            }
         },
         mounted() {
             this.$bus.$on('changeFilter', () => {
@@ -143,6 +145,9 @@
             },
             isSearching() {
                 return this.getTitleSearch.length > 0 || this.getAuthorSearch.length > 0 || this.getGlobalSearch.length > 0
+            },
+            networkStatus () {
+                return this.isOnline ? 'My network is fine' : 'I am offline'
             }
         },
         methods: {
@@ -158,54 +163,60 @@
                     this.$store.commit('changeStartIndex', 0)
                 }
 
-                if (this.getTitleSearch.length > 0 || this.getAuthorSearch.length > 0 || this.getGlobalSearch.length > 0) {
-                    axios
-                        .get(
-                            `https://www.googleapis.com/books/v1/volumes?q=${
-                                this.getGlobalSearch ? this.getGlobalSearch : ''
-                            }${
-                                this.getTitleSearch ? 'intitle:' + this.getTitleSearch : ''
-                            }${
-                                this.getAuthorSearch ? '+inauthor:' + this.getAuthorSearch : ''
-                            }&printType=${
-                                this.$store.state.type
-                            }&langRestrict=${
-                                this.$store.state.lang
-                            }&orderBy=${
-                                this.$store.state.orderBy
-                            }${
-                                this.getFilter
-                            }&startIndex=${
-                                this.$store.state.startIndex
-                            }&maxResults=${
-                                this.$store.state.maxResults
-                            }`
-                        )
-                        .then(response => {
-                            if (response.data.items) {
-                                if (!this.infiniteLoading) {
-                                    this.$store.commit('changeTotalItems', response.data.totalItems)
-                                    this.books = response.data.items
+                if (this.isOnline) {
+                    if (this.getTitleSearch.length > 0 || this.getAuthorSearch.length > 0 || this.getGlobalSearch.length > 0) {
+                        axios
+                            .get(
+                                `https://www.googleapis.com/books/v1/volumes?q=${
+                                    this.getGlobalSearch ? this.getGlobalSearch : ''
+                                }${
+                                    this.getTitleSearch ? 'intitle:' + this.getTitleSearch : ''
+                                }${
+                                    this.getAuthorSearch ? '+inauthor:' + this.getAuthorSearch : ''
+                                }&printType=${
+                                    this.$store.state.type
+                                }&langRestrict=${
+                                    this.$store.state.lang
+                                }&orderBy=${
+                                    this.$store.state.orderBy
+                                }${
+                                    this.getFilter
+                                }&startIndex=${
+                                    this.$store.state.startIndex
+                                }&maxResults=${
+                                    this.$store.state.maxResults
+                                }`
+                            )
+                            .then(response => {
+                                if (response.data.items) {
+                                    if (!this.infiniteLoading) {
+                                        this.$store.commit('changeTotalItems', response.data.totalItems)
+                                        this.books = response.data.items
+                                    } else {
+                                        response.data.items.forEach(book => {
+                                            this.books.push(book)
+                                        })
+                                        this.$refs.infiniteScroll.complete()
+                                        this.infiniteLoading = false
+                                    }
                                 } else {
-                                    response.data.items.forEach( book => {
-                                        this.books.push(book)
-                                    })
-                                    this.$refs.infiniteScroll.complete()
-                                    this.infiniteLoading = false
+                                    this.$store.commit('changeTotalItems', response.data.totalItems ? response.data.totalItems : null)
+                                    this.books = []
                                 }
-                            } else {
-                                this.$store.commit('changeTotalItems', response.data.totalItems ? response.data.totalItems : null)
-                                this.books = []
-                            }
-                            this.$store.commit('changeBooks', this.books)
-                            this.loading = false
-                        })
-                        .catch(error => {
-                            console.log(error)
-                        });
+                                this.$store.commit('changeBooks', this.books)
+                                this.$offlineStorage.set('books', this.books) //LocalStorage for offline
+                                this.loading = false
+                            })
+                            .catch(error => {
+                                console.log(error)
+                            });
+                    } else {
+                        this.books = []
+                        this.$store.commit('changeBooks', this.books)
+                        this.loading = false
+                    }
                 } else {
-                    this.books = []
-                    this.$store.commit('changeBooks', this.books)
+                    this.books = this.$offlineStorage.get('books') //Get books if offline
                     this.loading = false
                 }
             }
