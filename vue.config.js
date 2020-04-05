@@ -9,9 +9,9 @@ module.exports = {
         msTileColor: '#222222',
 
         manifestOptions: {
-            name: 'MyWeather.fr',
-            short_name: 'MyWeather',
-            start_url: '/',
+            name: 'Google Books Search',
+            short_name: 'GoogleBooks',
+            start_url: '/google-books-search/',
             display: 'standalone',
             themeColor: '#267c8b',
         },
