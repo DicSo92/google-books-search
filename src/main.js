@@ -13,6 +13,7 @@ Vue.use(Ionic);
 
 import VueLodash from 'vue-lodash'
 import lodash from 'lodash'
+import './registerServiceWorker'
 Vue.use(VueLodash, { name: 'custom' , lodash: lodash })
 
 
