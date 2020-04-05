@@ -3,7 +3,7 @@ module.exports = {
     pwa: {
         name: 'Google Books Search',
         short_name: 'GoogleBooks',
-        start_url: '/',
+        start_url: '/google-books-search/',
         display: 'standalone',
         themeColor: '#267c8b',
         msTileColor: '#222222',
